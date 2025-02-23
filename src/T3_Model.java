@@ -3,7 +3,7 @@ public class T3_Model{ //The M of our MVC model (model doesn't reference View/Co
         X, O, __            //when __ refers to a winner it means none OR a draw when verified by isFull()
     }
     private Player currentPlayer;
-    private Player board[][] = new Player[3][3];
+    private Player[][] board = new Player[3][3];
     public int xWins, oWins, numGames;
     public boolean isDraw;
     public Player winner;
@@ -35,8 +35,16 @@ public class T3_Model{ //The M of our MVC model (model doesn't reference View/Co
         }
         return true;
     }
+
     public Player currentPlayer(){
         return currentPlayer;
+    }
+
+    public Player getPosition(int i, int j){ //added for testing makeMove();
+        if((0 > i || i > 2)||(0>j || j>2)){ //keeps i/j input within bounds of 0-2
+            throw new IllegalArgumentException("Invalid board index");
+        }
+        return board[i][j];
     }
 
     public void switchPlayer(){ //can this be a shorter ternary statement?
@@ -47,7 +55,10 @@ public class T3_Model{ //The M of our MVC model (model doesn't reference View/Co
         }
     }
 
-    public void makeMove(int i, int j) { //TODO Unit test win counts
+    public void makeMove(int i, int j) {
+        if((0 > i || i > 2)||(0>j || j>2)){ //check bounds for args
+            throw new IllegalArgumentException("Invalid board index");
+        }
         if (board[i][j] == Player.__) {               //if the given spot is empty
             board[i][j] = currentPlayer();           //place the current player's enum symbol
             winner = getWinner();                   //check for a winner and store getWinner() result so we don't need to check entire board 3x
